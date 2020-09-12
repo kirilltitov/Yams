@@ -265,6 +265,26 @@ class ConstructorTests: XCTestCase { // swiftlint:disable:this type_body_length
         YamsAssertEqual(objects, expected)
     }
 
+    func testImplicitOmap() throws {
+        let example = """
+            Bestiary:
+              aardvark: African pig-like ant eater. Ugly.
+              anteater: South-American ant eater. Two species.
+              anaconda: South-American constrictor snake. Scaly.
+            JustList: [ lul, kek ]
+            """
+        let objects = try Yams.load(yaml: example, .default, .dictionaryAsPairs)
+        let expected: [(Any, Any)] = [
+            ("Bestiary", [
+                ("aardvark", "African pig-like ant eater. Ugly."),
+                ("anteater", "South-American ant eater. Two species."),
+                ("anaconda", "South-American constrictor snake. Scaly.")
+            ] as [(Any, Any)]),
+            ("JustList", [ "lul", "kek" ]),
+        ]
+        YamsAssertEqual(objects, expected)
+    }
+
     func testPairs() throws {
         let example = """
             # Explicitly typed pairs.

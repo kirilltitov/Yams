@@ -98,6 +98,17 @@ extension Constructor {
         .omap: [Any].construct_omap,
         .pairs: [Any].construct_pairs
     ]
+
+    public static var dictionaryAsPairs: Constructor {
+        var mappingMap = Self.defaultMappingMap
+        mappingMap[.map] = { (mapping: Node.Mapping) -> [(Any, Any)] in
+            mapping.flatten().compactMap { key, value -> (Any, Any)? in
+                (String.construct(from: key)!, mapping.tag.constructor.any(from: value))
+            }
+        }
+
+        return Self.init(Self.defaultScalarMap, mappingMap, Self.defaultSequenceMap)
+    }
 }
 
 // MARK: - ScalarConstructible
